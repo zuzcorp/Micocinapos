@@ -1672,6 +1672,7 @@
               <div class="order-actions-top">
                 <button type="button" class="btn btn-sm btn-dark" data-action="preview-current-ticket">🖨️ Ticket / Comanda</button>
                 <button type="button" class="btn btn-sm btn-warning-soft" data-action="save-open-order">💾 Guardar</button>
+                <button type="button" class="btn btn-sm btn-danger-soft" data-action="cancel-table-order">🚫 Cancelar mesa</button>
                 <button type="button" class="btn btn-sm btn-danger-soft" data-action="clear-current-order">Limpiar</button>
               </div>
             </div>
@@ -3227,6 +3228,41 @@
         if (!silent) showToast('Orden limpiada.', 'info');
       }
 
+      function cancelTableOrder() {
+        const currentTbl = orderServiceType === 'mesa' ? getSelectedTableObj() : null;
+        const existingOpenIdx = state.openOrders.findIndex(o =>
+          (activeOpenOrderId && o.id === activeOpenOrderId) ||
+          (orderServiceType === 'mesa' && currentTbl && o.serviceType === 'mesa' && o.tableId === currentTbl.id)
+        );
+
+        if (currentCart.length === 0 && existingOpenIdx === -1) {
+          showToast('Esta mesa/orden no tiene productos ni cuenta abierta para cancelar.', 'info');
+          return;
+        }
+
+        const label = existingOpenIdx !== -1 ? state.openOrders[existingOpenIdx].label : getOrderDisplayLabel();
+
+        openConfirm(
+          '¿Cancelar mesa / orden?',
+          `Se cancelará y quitará "${label}" sin registrar venta ni descontar inventario.`,
+          () => {
+            if (existingOpenIdx !== -1) {
+              state.openOrders.splice(existingOpenIdx, 1);
+            }
+            if (currentTbl) {
+              state.openOrders = state.openOrders.filter(o => !(o.serviceType === 'mesa' && o.tableId === currentTbl.id));
+            }
+
+            clearCurrentOrder(true);
+            saveState();
+            renderTablesGrid();
+            renderOpenOrders();
+            renderCart();
+            showToast(`Mesa/orden cancelada y liberada: ${label}`, 'warning');
+          }
+        );
+      }
+
       function deductIngredientsForSoldItems(soldItems) {
         soldItems.forEach(soldItem => {
           const qtySold = Number(soldItem.qty) || 0;
@@ -4229,6 +4265,10 @@
             openQuickInventoryModal(source, ingName, uid);
             break;
           }
+
+          case 'cancel-table-order':
+            cancelTableOrder();
+            break;
 
           case 'clear-current-order':
             clearCurrentOrder(false);
