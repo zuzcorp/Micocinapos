@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi Cocina POS</title>
+  <title>Mi Cocina POS — Dulce &amp; Amargo (Vista Previa Interactiva)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* =====================================================================
-       RESET Y VARIABLES DE DISEÑO (100% AUTOCONTENIDO + SUPABASE)
+       RESET Y VARIABLES DE DISEÑO (100% AUTOCONTENIDO + SUPABASE + DEMO)
        ===================================================================== */
     :root {
       --bg-app: #f6f4f1;
@@ -55,7 +56,7 @@
 
     html, body {
       min-height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-app);
       color: var(--text-main);
       line-height: 1.45;
@@ -110,7 +111,7 @@
     }
 
     /* =====================================================================
-       PANTALLAS DE ACCESO (LOGIN / REGISTRO) Y BLOQUEO POR MENSUALIDAD
+       PANTALLAS DE ACCESO (LOGIN / REGISTRO / DEMO) Y BLOQUEO
        ===================================================================== */
     .gate-screen {
       min-height: 100vh;
@@ -122,7 +123,7 @@
 
     .gate-card {
       width: 100%;
-      max-width: 440px;
+      max-width: 450px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
@@ -134,7 +135,15 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+    }
+
+    .demo-banner-box {
+      background: var(--brand-soft);
+      border: 1.5px solid var(--brand-border);
+      border-radius: var(--radius-md);
+      padding: 13px 14px;
+      margin-bottom: 16px;
     }
 
     .auth-tabs {
@@ -144,7 +153,7 @@
       background: var(--bg-muted);
       padding: 4px;
       border-radius: var(--radius-sm);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .auth-tab {
@@ -458,8 +467,57 @@
     }
 
     /* =====================================================================
-       VISTA 1: COBRAR / MESAS Y PARA LLEVAR
+       VISTA 1: DOS VENTANAS EN COBRAR / MESAS
        ===================================================================== */
+    .table-picker-window,
+    .table-capture-window {
+      animation: fadeInWindow 0.16s ease;
+    }
+
+    @keyframes fadeInWindow {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .table-station-banner {
+      background: var(--brand-soft);
+      border: 2px solid var(--brand);
+      border-radius: var(--radius-md);
+      padding: 13px 15px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .bottom-pending-bar {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .table-station-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .table-station-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
     .pos-top-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -475,20 +533,20 @@
 
     .tables-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(116px, 1fr));
-      gap: 9px;
+      grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+      gap: 10px;
       margin-bottom: 14px;
     }
 
     .table-btn {
-      padding: 11px 10px;
+      padding: 12px 11px;
       border-radius: var(--radius-md);
       border: 2px solid var(--border);
       background: var(--bg-subtle);
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
     }
 
     .table-btn:hover {
@@ -508,7 +566,7 @@
     }
 
     .table-btn-title {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 800;
       color: var(--text-main);
     }
@@ -539,7 +597,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 230px;
+      max-height: 260px;
       overflow-y: auto;
     }
 
@@ -750,7 +808,7 @@
       display: flex;
       flex-direction: column;
       gap: 9px;
-      max-height: 410px;
+      max-height: 390px;
       overflow-y: auto;
       margin-bottom: 14px;
     }
@@ -1391,6 +1449,257 @@
         margin: 2mm;
       }
     }
+
+    /* =====================================================================
+       ADAPTACIÓN AUTOMÁTICA POR DISPOSITIVO (CELULAR / TABLET / PC)
+       ===================================================================== */
+    .device-switcher-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+    }
+
+    .device-switcher-pill:hover {
+      border-color: var(--brand);
+      background: var(--brand-soft);
+    }
+
+    .device-switcher-pill select {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--brand-hover);
+      width: auto;
+      cursor: pointer;
+    }
+
+    .device-switcher-pill select:focus {
+      box-shadow: none;
+    }
+
+    .mobile-floating-cart-bar {
+      display: none;
+    }
+
+    /* --- MODO CELULAR (< 640px o forzado data-device="mobile") --- */
+    html[data-device="mobile"] body {
+      padding-bottom: 138px;
+    }
+
+    html[data-device="mobile"] .topbar-inner {
+      padding: 9px 12px;
+      gap: 8px;
+    }
+
+    html[data-device="mobile"] .brand-logo {
+      width: 36px;
+      height: 36px;
+      font-size: 1.1rem;
+    }
+
+    html[data-device="mobile"] .brand-title {
+      font-size: 0.98rem;
+    }
+
+    html[data-device="mobile"] .brand-date {
+      display: none;
+    }
+
+    html[data-device="mobile"] .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      border-radius: 16px 16px 0 0;
+      background: #ffffff;
+      border-top: 1px solid var(--border-strong);
+      box-shadow: 0 -6px 20px rgba(28, 25, 23, 0.12);
+      padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 3px;
+    }
+
+    html[data-device="mobile"] .nav-tab {
+      flex-direction: column;
+      justify-content: center;
+      padding: 7px 3px;
+      font-size: 0.67rem;
+      gap: 2px;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    html[data-device="mobile"] .nav-bar [data-action="logout-user"] {
+      padding: 7px 3px;
+      font-size: 0.67rem;
+      border-radius: var(--radius-sm);
+    }
+
+    html[data-device="mobile"] .container {
+      padding: 12px 10px 30px;
+    }
+
+    html[data-device="mobile"] .card {
+      padding: 13px;
+      border-radius: 16px;
+    }
+
+    html[data-device="mobile"] .tables-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    html[data-device="mobile"] .table-btn {
+      padding: 13px 10px;
+      min-height: 62px;
+    }
+
+    html[data-device="mobile"] .catalog-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    html[data-device="mobile"] .dish-card {
+      padding: 11px;
+      min-height: 116px;
+    }
+
+    html[data-device="mobile"] .dish-name {
+      font-size: 0.86rem;
+    }
+
+    html[data-device="mobile"] .dish-desc {
+      display: none;
+    }
+
+    html[data-device="mobile"] .pos-top-grid,
+    html[data-device="mobile"] .pos-main-grid,
+    html[data-device="mobile"] .two-col-grid {
+      grid-template-columns: 1fr !important;
+      gap: 12px;
+    }
+
+    html[data-device="mobile"] .order-panel {
+      position: static;
+    }
+
+    html[data-device="mobile"] .btn {
+      min-height: 42px;
+    }
+
+    html[data-device="mobile"] .btn-sm {
+      min-height: 34px;
+    }
+
+    html[data-device="mobile"] .mobile-floating-cart-bar.visible {
+      display: flex;
+      position: fixed;
+      bottom: 64px;
+      left: 10px;
+      right: 10px;
+      z-index: 45;
+      background: var(--dark);
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 10px 14px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 10px 24px rgba(28, 25, 23, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* --- MODO TABLET (640px - 1024px o forzado data-device="tablet") --- */
+    html[data-device="tablet"] .container {
+      max-width: 1024px;
+      padding: 14px 14px 36px;
+    }
+
+    html[data-device="tablet"] .tables-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    html[data-device="tablet"] .table-btn {
+      padding: 14px 12px;
+      min-height: 68px;
+    }
+
+    html[data-device="tablet"] .pos-top-grid {
+      grid-template-columns: 1.4fr 1fr;
+    }
+
+    html[data-device="tablet"] .pos-main-grid {
+      grid-template-columns: 1.15fr 1fr;
+      gap: 14px;
+    }
+
+    html[data-device="tablet"] .catalog-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    html[data-device="tablet"] .dish-card {
+      padding: 13px;
+    }
+
+    html[data-device="tablet"] .btn {
+      min-height: 42px;
+    }
+
+    html[data-device="tablet"] .order-panel {
+      position: sticky;
+      top: 76px;
+    }
+
+    /* --- MODO PC (> 1024px o forzado data-device="desktop") --- */
+    html[data-device="desktop"] .pos-top-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+
+    html[data-device="desktop"] .pos-main-grid {
+      grid-template-columns: 1.35fr 1.12fr;
+    }
+
+    html[data-device="desktop"] .order-panel {
+      position: sticky;
+      top: 82px;
+    }
+
+    /* Simulación visual centrada si se fuerza Celular o Tablet desde PC */
+    html[data-device-forced="true"][data-device="mobile"] body {
+      max-width: 440px;
+      margin: 0 auto;
+      border-left: 1px solid var(--border-strong);
+      border-right: 1px solid var(--border-strong);
+      box-shadow: var(--shadow-lg);
+    }
+
+    html[data-device-forced="true"][data-device="mobile"] .nav-bar,
+    html[data-device-forced="true"][data-device="mobile"] .mobile-floating-cart-bar {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    html[data-device-forced="true"][data-device="tablet"] body {
+      max-width: 900px;
+      margin: 0 auto;
+      border-left: 1px solid var(--border-strong);
+      border-right: 1px solid var(--border-strong);
+      box-shadow: var(--shadow-lg);
+    }
   </style>
 </head>
 <body>
@@ -1398,7 +1707,7 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- =====================================================================
-       PANTALLA 1: INICIO DE SESIÓN / REGISTRO
+       PANTALLA 1: INICIO DE SESIÓN / REGISTRO / VISTA PREVIA DEMO
        ===================================================================== -->
   <section id="auth-screen" class="gate-screen">
     <div class="gate-card">
@@ -1406,8 +1715,18 @@
         <div class="brand-logo">🍲</div>
         <div>
           <h1 style="font-size:1.2rem; font-weight:900;">Mi Cocina POS</h1>
-          <p style="font-size:0.78rem; color:var(--text-muted);">Acceso de restaurante y control de suscripción</p>
+          <p style="font-size:0.78rem; color:var(--text-muted);">Acceso de restaurante y vista previa interactiva</p>
         </div>
+      </div>
+
+      <div class="demo-banner-box">
+        <div style="font-size:0.84rem; font-weight:800; color:var(--brand-hover); margin-bottom:4px;">
+          🚀 Prueba el flujo de 2 ventanas al instante
+        </div>
+        <p style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:10px;">
+          Entra a la vista previa con mesas, menú, extras, inventario y corte cargados sin configurar credenciales.
+        </p>
+        <button type="button" id="btn-enter-demo" class="btn btn-lg btn-brand">✨ Entrar a Vista Previa Demo</button>
       </div>
 
       <div class="auth-tabs">
@@ -1433,7 +1752,7 @@
 
         <p id="auth-error-msg" class="hidden" style="font-size:0.8rem; font-weight:700; color:var(--danger);"></p>
 
-        <button type="submit" id="auth-submit-btn" class="btn btn-lg btn-brand">Entrar al sistema</button>
+        <button type="submit" id="auth-submit-btn" class="btn btn-dark">Entrar con cuenta</button>
       </form>
     </div>
   </section>
@@ -1462,14 +1781,15 @@
       </div>
 
       <div class="form-stack">
-        <button type="button" class="btn btn-brand" data-action="recheck-subscription">🔄 Verificar suscripción de nuevo</button>
+        <button type="button" class="btn btn-brand" data-action="enter-demo-mode">✨ Entrar a Vista Previa Demo</button>
+        <button type="button" class="btn btn-neutral" data-action="recheck-subscription">🔄 Verificar suscripción de nuevo</button>
         <button type="button" class="btn btn-neutral" data-action="logout-user">Cerrar sesión</button>
       </div>
     </div>
   </section>
 
   <!-- =====================================================================
-       APLICACIÓN POS COMPLETA (VISIBLE SOLO CON SESIÓN Y MENSUALIDAD VIGENTE)
+       APLICACIÓN POS COMPLETA (VISIBLE EN MODO DEMO O CUENTA ACTIVA)
        ===================================================================== -->
   <div id="pos-workspace" class="hidden">
 
@@ -1579,7 +1899,16 @@
               <h1 id="header-business-name" class="brand-title">Dulce &amp; Amargo</h1>
               <span class="status-pill">
                 <span class="status-dot"></span>
-                <span id="header-account-label">Cuenta Activa</span>
+                <span id="header-account-label">Vista Previa Demo</span>
+              </span>
+              <span class="device-switcher-pill" title="Detección automática de pantalla o vista previa manual">
+                <span id="device-mode-icon">💻</span>
+                <select id="device-mode-select" aria-label="Modo de pantalla">
+                  <option value="auto">Auto (PC)</option>
+                  <option value="mobile">📱 Celular</option>
+                  <option value="tablet">📟 Tablet</option>
+                  <option value="desktop">💻 PC</option>
+                </select>
               </span>
             </div>
             <p id="header-date" class="brand-date"></p>
@@ -1598,7 +1927,7 @@
             <span id="nav-inv-badge" class="badge-count badge-alert hidden">0</span>
           </button>
           <button type="button" class="nav-tab" data-tab="config" title="Configuración, Marca, Folios y Gestor de Mesas">⚙️ Config.</button>
-          <button type="button" class="btn btn-sm btn-neutral" data-action="logout-user" title="Cerrar sesión">Salir</button>
+          <button type="button" class="btn btn-sm btn-neutral" data-action="logout-user" title="Salir / Cambiar modo">Salir</button>
         </nav>
       </div>
     </header>
@@ -1606,174 +1935,153 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main class="container">
 
-      <!-- PESTAÑA 1: COBRAR / MESAS Y PARA LLEVAR -->
+      <!-- PESTAÑA 1: COBRAR / MESAS Y PARA LLEVAR (FLUJO DE DOS VENTANAS) -->
       <section id="view-pos">
-        <div class="pos-top-grid">
-          <div class="card">
-            <div class="section-header">
-              <div>
-                <h2 class="section-title">1. Selecciona Mesa o Pedido Para Llevar</h2>
-                <p class="section-subtitle">Toca una mesa o <strong>Para llevar</strong> con atajos rápidos y folio correlativo.</p>
+        <!-- VENTANA 1: SELECCIÓN DE MESAS / PARA LLEVAR Y CUENTAS ABIERTAS -->
+        <div id="table-picker-window" class="table-picker-window">
+          <div class="pos-top-grid">
+            <div class="card">
+              <div class="section-header">
+                <div>
+                  <h2 class="section-title">1. Selecciona Mesa o Pedido Para Llevar</h2>
+                  <p class="section-subtitle">Toca una mesa o <strong>Para llevar</strong> para abrir la ventana de platillos y bebidas.</p>
+                </div>
+                <button type="button" class="btn btn-sm btn-warning-soft" data-action="new-takeaway">+ Nuevo Para Llevar</button>
               </div>
-              <button type="button" class="btn btn-sm btn-warning-soft" data-action="new-takeaway">+ Nuevo Para Llevar</button>
+
+              <div id="tables-grid" class="tables-grid"></div>
+
+              <div class="form-grid-3">
+                <div>
+                  <label for="order-customer-input">Cliente / Referencia</label>
+                  <input type="text" id="order-customer-input" placeholder="Ej. Sra. Elena / Mesa familia" />
+                </div>
+                <div>
+                  <label for="order-address-input">Dirección / Teléfono (Para llevar)</label>
+                  <input type="text" id="order-address-input" placeholder="Ej. Calle Juárez #45, Centro" />
+                </div>
+                <div>
+                  <label for="order-notes-input">Notas Generales Cocina / Entrega</label>
+                  <input type="text" id="order-notes-input" placeholder="Ej. Todo junto, entregar a las 2:00 PM" />
+                </div>
+              </div>
             </div>
 
-            <div id="tables-grid" class="tables-grid"></div>
-
-            <div class="form-grid-3">
-              <div>
-                <label for="order-customer-input">Cliente / Referencia</label>
-                <input type="text" id="order-customer-input" placeholder="Ej. Sra. Elena / Mesa familia" />
+            <div class="card">
+              <div class="section-header">
+                <div>
+                  <h2 class="section-title">Cuentas Abiertas (Pendientes)</h2>
+                  <p class="section-subtitle">Toca una mesa pendiente para seguir agregando o cobrar</p>
+                </div>
+                <span id="open-orders-badge" class="pill-tag pill-amber">0 abiertas</span>
               </div>
-              <div>
-                <label for="order-address-input">Dirección / Teléfono (Para llevar)</label>
-                <input type="text" id="order-address-input" placeholder="Ej. Calle Juárez #45, Centro" />
-              </div>
-              <div>
-                <label for="order-notes-input">Notas Generales Cocina / Entrega</label>
-                <input type="text" id="order-notes-input" placeholder="Ej. Todo junto, entregar a las 2:00 PM" />
-              </div>
+              <div id="open-orders-list" class="open-orders-list"></div>
             </div>
-          </div>
-
-          <div class="card">
-            <div class="section-header">
-              <div>
-                <h2 class="section-title">Cuentas Abiertas</h2>
-                <p class="section-subtitle">Toca una orden para cargarla y cobrarla</p>
-              </div>
-              <span id="open-orders-badge" class="pill-tag pill-amber">0 abiertas</span>
-            </div>
-            <div id="open-orders-list" class="open-orders-list"></div>
           </div>
         </div>
 
-        <div class="pos-main-grid">
-          <div>
-            <div class="filter-toolbar">
-              <div id="category-pills" class="category-pills"></div>
-              <div class="search-box">
-                <input type="text" id="pos-search-input" placeholder="🔍 Buscar platillo o bebida..." />
+        <!-- VENTANA 2: CAPTURA DE PLATILLOS / BEBIDAS / COMIDA DEL DÍA + PONER EN PENDIENTE -->
+        <div id="table-capture-window" class="table-capture-window hidden">
+          <div id="table-station-panel" class="table-station-banner">
+            <div>
+              <div class="table-station-title">
+                <span>🍽️ Atendiendo:</span>
+                <span id="station-table-label" style="color:var(--brand);">Mesa 1</span>
+                <span id="station-folio-badge" class="folio-chip">#0001</span>
+                <span id="station-status-badge" class="pill-tag pill-green">Nueva orden</span>
               </div>
+              <p class="section-subtitle" style="margin-top:2px;">
+                Elige <strong>Comida del día</strong>, <strong>Platillos</strong>, <strong>Bebidas</strong> o <strong>Postres</strong> y toca los botones de platillos para ir agregándolos a esta mesa.
+              </p>
             </div>
-
-            <div id="pos-catalog-grid" class="catalog-grid"></div>
+            <div class="table-station-actions">
+              <button type="button" class="btn btn-warning-soft" data-action="put-table-pending">📌 Poner mesa en pendiente (Guardar)</button>
+              <button type="button" class="btn btn-neutral" data-action="back-to-tables-grid">← Cambiar de mesa</button>
+            </div>
           </div>
 
-          <aside class="card order-panel">
-            <div class="order-header">
-              <div>
-                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:2px;">
-                  <span id="active-order-folio" class="folio-chip">#0001</span>
-                  <span style="font-size:0.72rem; font-weight:800; color:var(--brand); text-transform:uppercase;">Orden Activa</span>
+          <div class="pos-main-grid">
+            <div>
+              <div class="filter-toolbar">
+                <div id="category-pills" class="category-pills"></div>
+                <div class="search-box">
+                  <input type="text" id="pos-search-input" placeholder="🔍 Buscar platillo o bebida..." />
                 </div>
-                <h2 id="active-order-heading" class="section-title">Mesa 1</h2>
               </div>
-              <div class="order-actions-top">
-                <button type="button" class="btn btn-sm btn-dark" data-action="preview-current-ticket">🖨️ Ticket / Comanda</button>
-                <button type="button" class="btn btn-sm btn-warning-soft" data-action="save-open-order">💾 Guardar</button>
-                <button type="button" class="btn btn-sm btn-danger-soft" data-action="cancel-table-order">🚫 Cancelar mesa</button>
-                <button type="button" class="btn btn-sm btn-danger-soft" data-action="clear-current-order">Limpiar</button>
-              </div>
+
+              <div id="pos-catalog-grid" class="catalog-grid"></div>
             </div>
 
-            <div id="cart-items-list" class="cart-list"></div>
-
-            <div class="checkout-box">
-              <div class="total-row">
-                <span class="total-label">Total a Cobrar:</span>
-                <span id="cart-total-display" class="total-amount">$0.00</span>
-              </div>
-
-              <label>Método de Pago</label>
-              <div class="pay-methods">
-                <button type="button" class="pay-btn active" data-pay="Efectivo">💵 Efectivo</button>
-                <button type="button" class="pay-btn" data-pay="Tarjeta">💳 Tarjeta</button>
-                <button type="button" class="pay-btn" data-pay="Transferencia">📲 Transferencia</button>
-              </div>
-
-              <div id="cash-calc-section" class="cash-calc">
-                <label for="cash-received-input">Efectivo Recibido ($ MXN)</label>
-                <div class="quick-bills">
-                  <button type="button" class="bill-btn" data-bill="50">$50</button>
-                  <button type="button" class="bill-btn" data-bill="100">$100</button>
-                  <button type="button" class="bill-btn" data-bill="200">$200</button>
-                  <button type="button" class="bill-btn" data-bill="500">$500</button>
-                  <button type="button" class="bill-btn" data-bill="exact">Exacto</button>
+            <aside id="active-order-aside" class="card order-panel">
+              <div class="order-header">
+                <div>
+                  <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:2px;">
+                    <span id="active-order-folio" class="folio-chip">#0001</span>
+                    <span style="font-size:0.72rem; font-weight:800; color:var(--brand); text-transform:uppercase;">Orden Activa</span>
+                  </div>
+                  <h2 id="active-order-heading" class="section-title">Mesa 1</h2>
                 </div>
-                <div class="cash-inputs-row">
-                  <input type="number" id="cash-received-input" min="0" step="1" placeholder="0.00" />
-                  <div class="change-box">
-                    <span class="change-label">Cambio</span>
-                    <span id="cash-change-display" class="change-value">$0.00</span>
+                <div class="order-actions-top">
+                  <button type="button" class="btn btn-sm btn-dark" data-action="preview-current-ticket">🖨️ Ticket / Comanda</button>
+                  <button type="button" class="btn btn-sm btn-warning-soft" data-action="put-table-pending">📌 Pendiente</button>
+                  <button type="button" class="btn btn-sm btn-danger-soft" data-action="cancel-table-order">🚫 Cancelar mesa</button>
+                  <button type="button" class="btn btn-sm btn-danger-soft" data-action="clear-current-order">Limpiar</button>
+                </div>
+              </div>
+
+              <div id="cart-items-list" class="cart-list"></div>
+
+              <div class="checkout-box">
+                <div class="total-row">
+                  <span class="total-label">Total a Cobrar:</span>
+                  <span id="cart-total-display" class="total-amount">$0.00</span>
+                </div>
+
+                <label>Método de Pago</label>
+                <div class="pay-methods">
+                  <button type="button" class="pay-btn active" data-pay="Efectivo">💵 Efectivo</button>
+                  <button type="button" class="pay-btn" data-pay="Tarjeta">💳 Tarjeta</button>
+                  <button type="button" class="pay-btn" data-pay="Transferencia">📲 Transferencia</button>
+                </div>
+
+                <div id="cash-calc-section" class="cash-calc">
+                  <label for="cash-received-input">Efectivo Recibido ($ MXN)</label>
+                  <div class="quick-bills">
+                    <button type="button" class="bill-btn" data-bill="50">$50</button>
+                    <button type="button" class="bill-btn" data-bill="100">$100</button>
+                    <button type="button" class="bill-btn" data-bill="200">$200</button>
+                    <button type="button" class="bill-btn" data-bill="500">$500</button>
+                    <button type="button" class="bill-btn" data-bill="exact">Exacto</button>
+                  </div>
+                  <div class="cash-inputs-row">
+                    <input type="number" id="cash-received-input" min="0" step="1" placeholder="0.00" />
+                    <div class="change-box">
+                      <span class="change-label">Cambio</span>
+                      <span id="cash-change-display" class="change-value">$0.00</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <button type="button" class="btn btn-lg btn-success" data-action="charge-order">✅ Cobrar Orden</button>
-          </aside>
-        </div>
-      </section>
-
-      <!-- PESTAÑA 2: CORTE DEL DÍA -->
-      <section id="view-corte" class="hidden">
-        <div class="card" style="margin-bottom:18px;">
-          <div class="section-header" style="margin-bottom:0;">
-            <div>
-              <h2 class="section-title">Corte de Caja del Día</h2>
-              <p class="section-subtitle">Resumen de ventas cobradas con folio correlativo, métodos de pago y respaldos.</p>
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:8px;">
-              <button type="button" class="btn btn-success" data-action="copy-whatsapp-corte">📲 Copiar Corte WhatsApp</button>
-              <button type="button" class="btn btn-neutral" data-action="export-csv">📄 Descargar CSV</button>
-              <button type="button" class="btn btn-neutral" data-action="export-json">💾 Respaldo JSON</button>
-              <label class="btn btn-info-soft" style="margin-bottom:0; cursor:pointer;">
-                📥 Restaurar JSON
-                <input type="file" id="import-json-input" accept=".json,application/json" class="hidden" />
-              </label>
-              <button type="button" class="btn btn-danger-soft" data-action="reset-shift">🔄 Nuevo Turno</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="kpi-grid">
-          <div class="kpi-card dark">
-            <div class="kpi-title">Venta Total del Día</div>
-            <div id="corte-kpi-total" class="kpi-number">$0.00</div>
-            <div id="corte-kpi-tickets" class="kpi-sub">0 órdenes cobradas</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-title">Efectivo en Caja</div>
-            <div id="corte-kpi-cash" class="kpi-number" style="color:var(--success);">$0.00</div>
-            <div class="kpi-sub">Cobros en efectivo</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-title">Tarjeta</div>
-            <div id="corte-kpi-card" class="kpi-number" style="color:#7c3aed;">$0.00</div>
-            <div class="kpi-sub">Cobros con terminal</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-title">Transferencia</div>
-            <div id="corte-kpi-transfer" class="kpi-number" style="color:#2563eb;">$0.00</div>
-            <div class="kpi-sub">Transferencias bancarias</div>
-          </div>
-        </div>
-
-        <div class="two-col-grid">
-          <div class="card">
-            <div class="section-header">
-              <h3 class="section-title">Platillos Vendidos Hoy</h3>
-            </div>
-            <div id="corte-dishes-list" class="item-list"></div>
+              <div class="bottom-pending-bar">
+                <button type="button" class="btn btn-lg btn-warning-soft" data-action="put-table-pending">📌 Poner mesa en pendiente (Guardar)</button>
+                <button type="button" class="btn btn-lg btn-success" data-action="charge-order">✅ Cobrar Orden</button>
+              </div>
+            </aside>
           </div>
 
-          <div class="card">
-            <div class="section-header">
-              <h3 class="section-title">Historial de Tickets Cobrados</h3>
-              <span class="section-subtitle">Reimprime cualquier ticket con su folio</span>
+          <!-- BARRA FLOTANTE DE RESUMEN RÁPIDO EN MODO CELULAR -->
+          <div id="mobile-floating-cart-bar" class="mobile-floating-cart-bar">
+            <div style="min-width:0;">
+              <div style="font-size:0.72rem; color:#d6d3d1; font-weight:700;">
+                <span id="mobile-bar-table">Mesa 1</span> · <span id="mobile-bar-count">0 prod.</span>
+              </div>
+              <div id="mobile-bar-total" style="font-size:1.05rem; font-weight:900; color:#ffffff;">$0.00</div>
             </div>
-            <div id="corte-history-list" class="item-list"></div>
+            <div style="display:flex; gap:6px; flex-shrink:0;">
+              <button type="button" class="btn btn-sm btn-warning-soft" data-action="put-table-pending">📌 Pendiente</button>
+              <button type="button" class="btn btn-sm btn-brand" data-action="scroll-to-order">Ver Orden ↓</button>
+            </div>
           </div>
         </div>
       </section>
@@ -2005,11 +2313,11 @@
               </div>
 
               <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 12px; padding: 14px;">
-                <strong style="font-size:0.88rem; display:block; margin-bottom:4px;">Suscripción y Sincronización en la Nube</strong>
+                <strong style="font-size:0.88rem; display:block; margin-bottom:4px;">Estado de Sesión y Respaldo</strong>
                 <p style="font-size:0.78rem; color:var(--text-muted);">
-                  <strong>Cuenta:</strong> <span id="cfg-account-email">—</span><br />
-                  <strong>Vigencia de mensualidad:</strong> <span id="cfg-period-end">—</span><br />
-                  Tus datos se sincronizan con Supabase y mantienen respaldo local y descarga JSON.
+                  <strong>Modo / Cuenta:</strong> <span id="cfg-account-email">—</span><br />
+                  <strong>Vigencia:</strong> <span id="cfg-period-end">—</span><br />
+                  Tus cambios se guardan en el navegador y se sincronizan con Supabase cuando hay sesión activa.
                 </p>
               </div>
 
@@ -2044,14 +2352,14 @@
   </div>
 
   <!-- =====================================================================
-       ÚNICO BLOQUE DE JAVASCRIPT AUTOCONTENIDO + SUPABASE
+       ÚNICO BLOQUE DE JAVASCRIPT AUTOCONTENIDO + SUPABASE + MODO DEMO
        ===================================================================== -->
   <script>
     (function () {
       'use strict';
 
       // -------------------------------------------------------------------
-      // 0. CONFIGURACIÓN DE SUPABASE (PEGA AQUÍ TU URL Y TU CLAVE ANON)
+      // 0. CONFIGURACIÓN DE SUPABASE + MODO DEMO INTERACTIVO
       // -------------------------------------------------------------------
       const SUPABASE_URL = 'https://demecmbjohupktivzdfx.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_yZ9N_w5ayUnhTm3ts0Fomw_RRSHBuuq';
@@ -2231,28 +2539,112 @@
         });
       }
 
-      let state = {
-        businessName: 'Dulce & Amargo',
-        brandColor: DEFAULT_BRAND_COLOR,
-        bgColor: DEFAULT_BG_COLOR,
-        logoDataUrl: '',
-        nextFolio: 1,
-        tables: createDefaultTables(),
-        categoryExtras: JSON.parse(JSON.stringify(DEFAULT_CATEGORY_EXTRAS)),
-        menu: JSON.parse(JSON.stringify(DEFAULT_MENU)),
-        inventory: JSON.parse(JSON.stringify(DEFAULT_INVENTORY)),
-        openOrders: [],
-        sales: []
-      };
+      function createDemoInitialData() {
+        return {
+          businessName: 'Dulce & Amargo',
+          brandColor: DEFAULT_BRAND_COLOR,
+          bgColor: DEFAULT_BG_COLOR,
+          logoDataUrl: '',
+          nextFolio: 4,
+          tables: createDefaultTables(),
+          categoryExtras: JSON.parse(JSON.stringify(DEFAULT_CATEGORY_EXTRAS)),
+          menu: JSON.parse(JSON.stringify(DEFAULT_MENU)),
+          inventory: JSON.parse(JSON.stringify(DEFAULT_INVENTORY)),
+          openOrders: [
+            {
+              id: 'demo-ord-2',
+              folio: 2,
+              serviceType: 'mesa',
+              tableId: 'table-2',
+              label: 'Mesa 2',
+              customer: 'Familia López',
+              address: '',
+              notes: 'Sin picante en comida del día',
+              items: [
+                {
+                  uid: 'demo-ci-1',
+                  dishId: 'dish-1',
+                  category: 'Comida del día',
+                  name: 'Comida del día 1: Pollo en Mole',
+                  price: 85,
+                  qty: 2,
+                  extraText: 'Pierna',
+                  extraPrice: 0,
+                  ingredientsText: 'Pollo, mole, arroz, tortillas',
+                  autoDeductIngredients: true
+                },
+                {
+                  uid: 'demo-ci-2',
+                  dishId: 'dish-6',
+                  category: 'Bebidas',
+                  name: 'Agua Fresca 1 Litro',
+                  price: 35,
+                  qty: 1,
+                  extraText: 'Horchata',
+                  extraPrice: 0,
+                  ingredientsText: 'Agua fresca',
+                  autoDeductIngredients: true
+                }
+              ],
+              total: 205
+            }
+          ],
+          sales: [
+            {
+              id: 'demo-sale-1',
+              folio: 1,
+              label: 'Mesa 5',
+              customer: 'Carlos M.',
+              address: '',
+              notes: '',
+              items: [
+                {
+                  uid: 's-1',
+                  dishId: 'dish-3',
+                  category: 'Platillos',
+                  name: 'Orden de Tacos Dorados (4)',
+                  price: 70,
+                  qty: 1,
+                  extraText: 'Extra crema y queso',
+                  extraPrice: 15,
+                  ingredientsText: 'Tortillas de maíz, crema, queso, salsa',
+                  autoDeductIngredients: true
+                },
+                {
+                  uid: 's-2',
+                  dishId: 'dish-5',
+                  category: 'Bebidas',
+                  name: 'Refresco 600ml',
+                  price: 28,
+                  qty: 1,
+                  extraText: '',
+                  extraPrice: 0,
+                  ingredientsText: 'Refresco 600ml',
+                  autoDeductIngredients: true
+                }
+              ],
+              total: 113,
+              paymentMethod: 'Efectivo',
+              time: '13:15'
+            }
+          ]
+        };
+      }
+
+      let state = createDemoInitialData();
 
       let currentAccount = null;
-      let authMode = 'login'; // 'login' | 'register'
+      let isDemoSession = false;
+      let authMode = 'login';
       let activeTab = 'pos';
       let orderServiceType = 'mesa';
+      let isTableCaptureOpen = false;
+      let deviceOverride = safeStore.get('pos_device_mode_override') || 'auto';
+      let detectedDeviceType = 'desktop';
       let selectedTableId = 'table-1';
       let takeawaySeq = 1;
       let activeOpenOrderId = null;
-      let activeOrderFolio = 1;
+      let activeOrderFolio = state.nextFolio;
       let currentCart = [];
       let expandedCartItemId = null;
       let editingExtraPresetsForUid = null;
@@ -2265,7 +2657,112 @@
       let pendingConfirmAction = null;
       let quickInvContext = { ingredientName: '', targetCartUid: null, source: 'menu' };
 
+      function syncTableWindowVisibility() {
+        const pickerWin = document.getElementById('table-picker-window');
+        const captureWin = document.getElementById('table-capture-window');
+        if (!pickerWin || !captureWin) return;
+        pickerWin.classList.toggle('hidden', isTableCaptureOpen);
+        captureWin.classList.toggle('hidden', !isTableCaptureOpen);
+      }
+
+      function openTableCaptureWindow() {
+        isTableCaptureOpen = true;
+        syncTableWindowVisibility();
+        renderCategoryPills();
+        renderCatalog();
+        renderCart();
+        updateMobileFloatingBar();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function returnToTablePickerWindow() {
+        isTableCaptureOpen = false;
+        syncTableWindowVisibility();
+        updateMobileFloatingBar();
+        renderTablesGrid();
+        renderOpenOrders();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // -------------------------------------------------------------------
+      // DETECCIÓN Y ADAPTACIÓN AUTOMÁTICA DE DISPOSITIVO (CELULAR/TABLET/PC)
+      // -------------------------------------------------------------------
+      function detectViewportCategory() {
+        const w = window.innerWidth || document.documentElement.clientWidth || 1200;
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        if (w < 640) return 'mobile';
+        if (w <= 1024 || (isTouch && w <= 1180)) return 'tablet';
+        return 'desktop';
+      }
+
+      function getDeviceLabelEs(type) {
+        if (type === 'mobile') return 'Celular';
+        if (type === 'tablet') return 'Tablet';
+        return 'PC';
+      }
+
+      function getDeviceIcon(type) {
+        if (type === 'mobile') return '📱';
+        if (type === 'tablet') return '📟';
+        return '💻';
+      }
+
+      function applyResponsiveDeviceMode(announce = false) {
+        detectedDeviceType = detectViewportCategory();
+        const activeDevice = deviceOverride === 'auto' ? detectedDeviceType : deviceOverride;
+        const htmlEl = document.documentElement;
+
+        htmlEl.setAttribute('data-device', activeDevice);
+        htmlEl.setAttribute('data-device-forced', deviceOverride !== 'auto' ? 'true' : 'false');
+
+        const iconEl = document.getElementById('device-mode-icon');
+        const selectEl = document.getElementById('device-mode-select');
+        if (iconEl) iconEl.textContent = getDeviceIcon(activeDevice);
+        if (selectEl) {
+          const autoOpt = selectEl.querySelector('option[value="auto"]');
+          if (autoOpt) {
+            autoOpt.textContent = `Auto (${getDeviceLabelEs(detectedDeviceType)})`;
+          }
+          selectEl.value = deviceOverride;
+        }
+
+        updateMobileFloatingBar();
+
+        if (announce) {
+          const modeDesc = deviceOverride === 'auto'
+            ? `Automático (${getDeviceLabelEs(activeDevice)})`
+            : `Vista previa ${getDeviceLabelEs(activeDevice)}`;
+          showToast(`Diseño adaptado a: ${modeDesc}`, 'info');
+        }
+      }
+
+      function updateMobileFloatingBar() {
+        const bar = document.getElementById('mobile-floating-cart-bar');
+        if (!bar) return;
+        const activeDevice = document.documentElement.getAttribute('data-device') || 'desktop';
+        const showBar = activeDevice === 'mobile' && activeTab === 'pos' && isTableCaptureOpen;
+        bar.classList.toggle('visible', showBar);
+        if (!showBar) return;
+
+        const count = currentCart.reduce((acc, i) => acc + (Number(i.qty) || 0), 0);
+        const tableEl = document.getElementById('mobile-bar-table');
+        const countEl = document.getElementById('mobile-bar-count');
+        const totalEl = document.getElementById('mobile-bar-total');
+        if (tableEl) tableEl.textContent = getOrderDisplayLabel();
+        if (countEl) countEl.textContent = `${count} prod.`;
+        if (totalEl) totalEl.textContent = formatMXN(getCartTotal());
+      }
+
+      function returnToTablePickerWindow() {
+        isTableCaptureOpen = false;
+        syncTableWindowVisibility();
+        renderTablesGrid();
+        renderOpenOrders();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
       function getLocalStorageKey() {
+        if (isDemoSession) return 'pos_fonda_dulce_amargo_demo_v1';
         const uid = currentAccount && currentAccount.id ? currentAccount.id : 'guest';
         return 'pos_fonda_dulce_amargo_v4_' + uid;
       }
@@ -2394,7 +2891,7 @@
       }
 
       async function syncStateToCloud() {
-        if (!sbClient || !currentAccount || !currentAccount.id) return;
+        if (isDemoSession || !sbClient || !currentAccount || !currentAccount.id) return;
         try {
           const { error } = await sbClient
             .from('restaurant_accounts')
@@ -2419,7 +2916,7 @@
       }
 
       // -------------------------------------------------------------------
-      // PANTALLAS DE ACCESO Y VERIFICACIÓN DE MENSUALIDAD (SUPABASE)
+      // MODO DEMO INTERACTIVO + SESIÓN SUPABASE
       // -------------------------------------------------------------------
       function showGateScreen(screenName) {
         const authEl = document.getElementById('auth-screen');
@@ -2431,12 +2928,30 @@
         posEl.classList.toggle('hidden', screenName !== 'pos');
       }
 
+      function enterDemoMode() {
+        isDemoSession = true;
+        currentAccount = {
+          id: 'demo-user',
+          email: 'Vista Previa Demo',
+          subscription_status: 'active',
+          current_period_end: new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString()
+        };
+        state = createDemoInitialData();
+        loadLocalState();
+        isTableCaptureOpen = false;
+        activeTab = 'pos';
+        clearCurrentOrder(true);
+        showGateScreen('pos');
+        renderAll();
+        showToast('Vista Previa Demo activa: selecciona una mesa para empezar.', 'info');
+      }
+
       function setAuthMode(mode) {
         authMode = mode;
         document.getElementById('auth-tab-login').classList.toggle('active', mode === 'login');
         document.getElementById('auth-tab-register').classList.toggle('active', mode === 'register');
         document.getElementById('auth-business-group').classList.toggle('hidden', mode !== 'register');
-        document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Entrar al sistema' : 'Crear cuenta y continuar';
+        document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Entrar con cuenta' : 'Crear cuenta y continuar';
         document.getElementById('auth-error-msg').classList.add('hidden');
       }
 
@@ -2456,11 +2971,15 @@
       }
 
       async function evaluateUserSession() {
+        if (isDemoSession) {
+          showGateScreen('pos');
+          renderAll();
+          return;
+        }
+
         const errEl = document.getElementById('auth-error-msg');
 
         if (!hasSupabaseConfig || !sbClient) {
-          errEl.textContent = 'Falta configurar SUPABASE_URL y SUPABASE_ANON_KEY en el código HTML.';
-          errEl.classList.remove('hidden');
           showGateScreen('auth');
           return;
         }
@@ -2500,7 +3019,6 @@
           return;
         }
 
-        // Suscripción vigente: cargar estado local y luego aplicar nube si trae datos guardados
         loadLocalState();
         if (accountRow.business_name) {
           state.businessName = accountRow.business_name;
@@ -2521,7 +3039,7 @@
         errEl.classList.add('hidden');
 
         if (!hasSupabaseConfig || !sbClient) {
-          errEl.textContent = 'Pega primero tu SUPABASE_URL y SUPABASE_ANON_KEY dentro del <script>.';
+          errEl.textContent = 'Puedes usar "Entrar a Vista Previa Demo" arriba sin credenciales.';
           errEl.classList.remove('hidden');
           return;
         }
@@ -2532,6 +3050,7 @@
 
         submitBtn.disabled = true;
         try {
+          isDemoSession = false;
           if (authMode === 'login') {
             const { error } = await sbClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
@@ -2544,7 +3063,7 @@
             if (error) throw error;
             if (!data.session) {
               errEl.style.color = 'var(--success)';
-              errEl.textContent = 'Cuenta creada. Revisa tu correo para confirmar y luego inicia sesión.';
+              errEl.textContent = 'Cuenta creada. Revisa tu correo para confirmar o entra con Vista Previa Demo.';
               errEl.classList.remove('hidden');
               return;
             }
@@ -2552,7 +3071,7 @@
           await evaluateUserSession();
         } catch (err) {
           errEl.style.color = 'var(--danger)';
-          errEl.textContent = err.message || 'No se pudo completar la autenticación.';
+          errEl.textContent = (err.message || 'No se pudo completar la autenticación.') + ' Usa Vista Previa Demo si lo deseas.';
           errEl.classList.remove('hidden');
         } finally {
           submitBtn.disabled = false;
@@ -2560,8 +3079,9 @@
       }
 
       async function logoutUser() {
+        isDemoSession = false;
         if (sbClient) {
-          await sbClient.auth.signOut();
+          try { await sbClient.auth.signOut(); } catch (e) {}
         }
         currentAccount = null;
         clearCurrentOrder(true);
@@ -2605,9 +3125,6 @@
         if (!file.type || !file.type.startsWith('image/')) {
           showToast('Selecciona un archivo de imagen válido (PNG, JPG, SVG).', 'warning');
           return;
-        }
-        if (file.size > 900 * 1024) {
-          showToast('El logo pesa más de 900 KB; usa una imagen ligera para evitar lentitud.', 'warning');
         }
         const reader = new FileReader();
         reader.onload = function (evt) {
@@ -2720,8 +3237,10 @@
         applyBrandTheme();
         document.getElementById('header-business-name').textContent = state.businessName;
         const accLabel = document.getElementById('header-account-label');
-        if (accLabel && currentAccount && currentAccount.email) {
-          accLabel.textContent = currentAccount.email;
+        if (accLabel) {
+          accLabel.textContent = isDemoSession
+            ? 'Vista Previa Demo'
+            : ((currentAccount && currentAccount.email) || 'Cuenta Activa');
         }
         const now = new Date();
         document.getElementById('header-date').textContent = now.toLocaleDateString('es-MX', {
@@ -2739,6 +3258,7 @@
       function renderAll() {
         updateHeader();
         if (activeTab === 'pos') {
+          syncTableWindowVisibility();
           renderCategoryPills();
           renderTablesGrid();
           renderOpenOrders();
@@ -2799,7 +3319,7 @@
         html += `
           <button type="button" class="table-btn ${isTakeawaySel ? 'selected' : ''} ${takeawayOpenCount > 0 ? 'occupied' : ''}" data-action="select-takeaway">
             <span class="table-btn-title">🛍️ Para llevar</span>
-            <span class="table-btn-status">${takeawayOpenCount > 0 ? takeawayOpenCount + ' abierta(s)' : 'Pedido rápido'}</span>
+            <span class="table-btn-status">${takeawayOpenCount > 0 ? takeawayOpenCount + ' pendiente(s)' : 'Toca para abrir'}</span>
           </button>
         `;
 
@@ -2809,7 +3329,7 @@
           html += `
             <button type="button" class="table-btn ${isSel ? 'selected' : ''} ${openOrd ? 'occupied' : ''}" data-action="select-table" data-table-id="${escapeHTML(tbl.id)}">
               <span class="table-btn-title">🪑 ${escapeHTML(tbl.label)}</span>
-              <span class="table-btn-status">${openOrd ? `${formatFolio(openOrd.folio)} · ${formatMXN(openOrd.total)}` : 'Disponible'}</span>
+              <span class="table-btn-status">${openOrd ? `Pendiente ${formatFolio(openOrd.folio)} · ${formatMXN(openOrd.total)}` : 'Disponible'}</span>
             </button>
           `;
         });
@@ -2843,6 +3363,7 @@
         }
         renderTablesGrid();
         renderCart();
+        openTableCaptureWindow();
       }
 
       function selectTakeawayMode(isNew = false) {
@@ -2861,15 +3382,16 @@
         }
         renderTablesGrid();
         renderCart();
+        openTableCaptureWindow();
       }
 
       function renderOpenOrders() {
         const listEl = document.getElementById('open-orders-list');
         const badgeEl = document.getElementById('open-orders-badge');
-        badgeEl.textContent = `${state.openOrders.length} abierta(s)`;
+        badgeEl.textContent = `${state.openOrders.length} pendiente(s)`;
 
         if (state.openOrders.length === 0) {
-          listEl.innerHTML = `<div class="cart-empty" style="padding:18px;">No hay cuentas abiertas en espera.</div>`;
+          listEl.innerHTML = `<div class="cart-empty" style="padding:18px;">No hay mesas en pendiente.</div>`;
           return;
         }
 
@@ -2907,7 +3429,8 @@
         document.getElementById('order-notes-input').value = ord.notes || '';
         renderTablesGrid();
         renderCart();
-        showToast(`Cuenta ${formatFolio(activeOrderFolio)} cargada: ${ord.label}`, 'info');
+        openTableCaptureWindow();
+        showToast(`Mesa pendiente ${formatFolio(activeOrderFolio)} abierta: ${ord.label}`, 'info');
       }
 
       function renderCatalog() {
@@ -2990,6 +3513,7 @@
       function refreshOrderTotalsAndBadges(uid = null) {
         document.getElementById('cart-total-display').textContent = formatMXN(getCartTotal());
         calculateCashChange();
+        updateMobileFloatingBar();
 
         if (!uid) return;
         const item = currentCart.find(c => c.uid === uid);
@@ -3043,9 +3567,33 @@
         return missing;
       }
 
+      function syncTableStationBanner() {
+        const labelEl = document.getElementById('station-table-label');
+        const folioEl = document.getElementById('station-folio-badge');
+        const statusEl = document.getElementById('station-status-badge');
+        if (!labelEl || !folioEl || !statusEl) return;
+
+        labelEl.textContent = getOrderDisplayLabel();
+        folioEl.textContent = formatFolio(activeOrderFolio);
+
+        const count = currentCart.reduce((acc, i) => acc + (Number(i.qty) || 0), 0);
+        if (activeOpenOrderId) {
+          statusEl.className = 'pill-tag pill-amber';
+          statusEl.textContent = `En pendientes · ${count} prod. (${formatMXN(getCartTotal())})`;
+        } else if (count > 0) {
+          statusEl.className = 'pill-tag pill-blue';
+          statusEl.textContent = `Capturando · ${count} prod. (${formatMXN(getCartTotal())})`;
+        } else {
+          statusEl.className = 'pill-tag pill-green';
+          statusEl.textContent = 'Listo para agregar platillos';
+        }
+      }
+
       function renderCart() {
         document.getElementById('active-order-folio').textContent = formatFolio(activeOrderFolio);
         document.getElementById('active-order-heading').textContent = getOrderDisplayLabel();
+        syncTableStationBanner();
+        updateMobileFloatingBar();
 
         const listEl = document.getElementById('cart-items-list');
         const total = getCartTotal();
@@ -3236,7 +3784,7 @@
         );
 
         if (currentCart.length === 0 && existingOpenIdx === -1) {
-          showToast('Esta mesa/orden no tiene productos ni cuenta abierta para cancelar.', 'info');
+          showToast('Esta mesa/orden no tiene productos ni cuenta pendiente para cancelar.', 'info');
           return;
         }
 
@@ -3255,9 +3803,7 @@
 
             clearCurrentOrder(true);
             saveState();
-            renderTablesGrid();
-            renderOpenOrders();
-            renderCart();
+            returnToTablePickerWindow();
             showToast(`Mesa/orden cancelada y liberada: ${label}`, 'warning');
           }
         );
@@ -3287,10 +3833,10 @@
         });
       }
 
-      function saveOpenOrder() {
+      function saveOpenOrder(silent = false) {
         if (currentCart.length === 0) {
-          showToast('Agrega platillos antes de guardar la cuenta.', 'warning');
-          return;
+          if (!silent) showToast('Agrega platillos antes de guardar la cuenta en pendiente.', 'warning');
+          return null;
         }
 
         const label = getOrderDisplayLabel();
@@ -3302,7 +3848,7 @@
 
         const existingIdx = state.openOrders.findIndex(o =>
           (activeOpenOrderId && o.id === activeOpenOrderId) ||
-          (orderServiceType === 'mesa' && o.serviceType === 'mesa' && o.tableId === currentTbl.id)
+          (orderServiceType === 'mesa' && currentTbl && o.serviceType === 'mesa' && o.tableId === currentTbl.id)
         );
 
         const folioToUse = existingIdx !== -1
@@ -3338,7 +3884,22 @@
         renderTablesGrid();
         renderOpenOrders();
         renderCart();
-        showToast(`Cuenta ${formatFolio(orderObj.folio)} guardada: ${label}`, 'success');
+        if (!silent) {
+          showToast(`📌 ${label} (${formatFolio(orderObj.folio)}) puesta en pendiente.`, 'success');
+        }
+        return orderObj;
+      }
+
+      function putTableInPending() {
+        if (currentCart.length === 0) {
+          showToast('Toca al menos un platillo o bebida antes de poner la mesa en pendiente.', 'warning');
+          return;
+        }
+        const saved = saveOpenOrder(true);
+        if (!saved) return;
+        clearCurrentOrder(true);
+        returnToTablePickerWindow();
+        showToast(`📌 ${saved.label} (${formatFolio(saved.folio)}) guardada en pendientes.`, 'success');
       }
 
       function chargeOrder() {
@@ -3396,6 +3957,7 @@
         }
 
         clearCurrentOrder(true);
+        isTableCaptureOpen = false;
         renderAll();
         showToast(`Folio ${formatFolio(folioCobrado)} cobrado: ${formatMXN(total)} (${selectedPayment})`, 'success');
       }
@@ -3854,8 +4416,16 @@
 
         const emailSpan = document.getElementById('cfg-account-email');
         const periodSpan = document.getElementById('cfg-period-end');
-        if (emailSpan) emailSpan.textContent = (currentAccount && currentAccount.email) || '—';
-        if (periodSpan) periodSpan.textContent = currentAccount ? formatDateTimeMX(currentAccount.current_period_end) : '—';
+        if (emailSpan) {
+          emailSpan.textContent = isDemoSession
+            ? 'Vista Previa Demo (Interactiva)'
+            : ((currentAccount && currentAccount.email) || '—');
+        }
+        if (periodSpan) {
+          periodSpan.textContent = isDemoSession
+            ? 'Disponible para pruebas'
+            : (currentAccount ? formatDateTimeMX(currentAccount.current_period_end) : '—');
+        }
 
         const listEl = document.getElementById('tables-manager-list');
         if (!state.tables || state.tables.length === 0) {
@@ -3870,7 +4440,7 @@
               <div class="table-admin-input-wrap">
                 <span class="pill-tag pill-gray">#${idx + 1}</span>
                 <input type="text" id="rename-table-input-${escapeHTML(tbl.id)}" value="${escapeHTML(tbl.label)}" aria-label="Nombre de ${escapeHTML(tbl.label)}" />
-                ${hasOpenOrder ? `<span class="pill-tag pill-amber">Cuenta abierta</span>` : `<span class="pill-tag pill-green">Libre</span>`}
+                ${hasOpenOrder ? `<span class="pill-tag pill-amber">Pendiente</span>` : `<span class="pill-tag pill-green">Libre</span>`}
               </div>
               <div style="display:flex; gap:6px;">
                 <button type="button" class="btn btn-sm btn-success" data-action="save-table-name" data-table-id="${escapeHTML(tbl.id)}">💾 Guardar</button>
@@ -3926,7 +4496,7 @@
         if (!tbl) return;
         const hasOpenOrder = state.openOrders.some(o => o.serviceType === 'mesa' && o.tableId === tableId);
         if (hasOpenOrder) {
-          showToast(`No puedes quitar "${tbl.label}" mientras tenga una cuenta abierta sin cobrar.`, 'warning');
+          showToast(`No puedes quitar "${tbl.label}" mientras tenga una cuenta pendiente sin cobrar.`, 'warning');
           return;
         }
         if (state.tables.length <= 1) {
@@ -3947,7 +4517,7 @@
       function restoreDefaultTables() {
         const anyOpenOnMesa = state.openOrders.some(o => o.serviceType === 'mesa');
         if (anyOpenOnMesa) {
-          showToast('Cierra o cobra las cuentas abiertas en mesa antes de restaurar las mesas.', 'warning');
+          showToast('Cierra o cobra las cuentas pendientes en mesa antes de restaurar las mesas.', 'warning');
           return;
         }
         openConfirm('¿Restaurar Mesas 1 a 8?', 'Se volverán a poner las 8 mesas por defecto sin borrar tu menú, inventario ni ventas.', () => {
@@ -3958,6 +4528,8 @@
           showToast('Mesas 1 a 8 restauradas.', 'success');
         });
       }
+
+      document.getElementById('btn-enter-demo').addEventListener('click', enterDemoMode);
 
       document.addEventListener('click', function (e) {
         const authModeBtn = e.target.closest('[data-auth-mode]');
@@ -4008,6 +4580,10 @@
         const action = actionEl.getAttribute('data-action');
 
         switch (action) {
+          case 'enter-demo-mode':
+            enterDemoMode();
+            break;
+
           case 'logout-user':
             logoutUser();
             break;
@@ -4274,9 +4850,21 @@
             clearCurrentOrder(false);
             break;
 
-          case 'save-open-order':
-            saveOpenOrder();
+          case 'put-table-pending':
+            putTableInPending();
             break;
+
+          case 'back-to-tables-grid':
+            returnToTablePickerWindow();
+            break;
+
+          case 'scroll-to-order': {
+            const asideEl = document.getElementById('active-order-aside');
+            if (asideEl) {
+              asideEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            break;
+          }
 
           case 'charge-order':
             chargeOrder();
@@ -4492,7 +5080,11 @@
       });
 
       document.addEventListener('change', function (e) {
-        if (e.target.id === 'cfg-logo-file' && e.target.files && e.target.files[0]) {
+        if (e.target.id === 'device-mode-select') {
+          deviceOverride = e.target.value || 'auto';
+          safeStore.set('pos_device_mode_override', deviceOverride);
+          applyResponsiveDeviceMode(true);
+        } else if (e.target.id === 'cfg-logo-file' && e.target.files && e.target.files[0]) {
           handleLogoUpload(e.target.files[0]);
         } else if (e.target.hasAttribute('data-cart-ing-deduct')) {
           const uid = e.target.getAttribute('data-cart-ing-deduct');
@@ -4629,13 +5221,28 @@
 
       if (sbClient) {
         sbClient.auth.onAuthStateChange(function (event) {
-          if (event === 'SIGNED_OUT') {
+          if (event === 'SIGNED_OUT' && !isDemoSession) {
             currentAccount = null;
             showGateScreen('auth');
           }
         });
       }
 
+      let resizeDebounceTimer = null;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeDebounceTimer);
+        resizeDebounceTimer = setTimeout(function () {
+          applyResponsiveDeviceMode(false);
+        }, 120);
+      });
+
+      window.addEventListener('orientationchange', function () {
+        setTimeout(function () {
+          applyResponsiveDeviceMode(false);
+        }, 150);
+      });
+
+      applyResponsiveDeviceMode(false);
       evaluateUserSession();
     })();
   </script>
