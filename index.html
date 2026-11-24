@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi Cocina POS — Dulce &amp; Amargo (Vista Previa Interactiva)</title>
+  <title>Mi Cocina POS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* =====================================================================
-       RESET Y VARIABLES DE DISEÑO (100% AUTOCONTENIDO + SUPABASE + DEMO)
+       RESET Y VARIABLES DE DISEÑO (100% AUTOCONTENIDO + SUPABASE)
        ===================================================================== */
     :root {
       --bg-app: #f6f4f1;
@@ -111,7 +111,7 @@
     }
 
     /* =====================================================================
-       PANTALLAS DE ACCESO (LOGIN / REGISTRO / DEMO) Y BLOQUEO
+       PANTALLAS DE ACCESO (LOGIN / REGISTRO) Y BLOQUEO POR SUSCRIPCIÓN
        ===================================================================== */
     .gate-screen {
       min-height: 100vh;
@@ -123,7 +123,7 @@
 
     .gate-card {
       width: 100%;
-      max-width: 450px;
+      max-width: 440px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
@@ -135,15 +135,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .demo-banner-box {
-      background: var(--brand-soft);
-      border: 1.5px solid var(--brand-border);
-      border-radius: var(--radius-md);
-      padding: 13px 14px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .auth-tabs {
@@ -1707,26 +1699,16 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- =====================================================================
-       PANTALLA 1: INICIO DE SESIÓN / REGISTRO / VISTA PREVIA DEMO
+       PANTALLA 1: INICIO DE SESIÓN / REGISTRO DE RESTAURANTE (SUPABASE)
        ===================================================================== -->
   <section id="auth-screen" class="gate-screen">
     <div class="gate-card">
       <div class="gate-brand">
         <div class="brand-logo">🍲</div>
         <div>
-          <h1 style="font-size:1.2rem; font-weight:900;">Mi Cocina POS</h1>
-          <p style="font-size:0.78rem; color:var(--text-muted);">Acceso de restaurante y vista previa interactiva</p>
+          <h1 style="font-size:1.25rem; font-weight:900;">Mi Cocina POS</h1>
+          <p style="font-size:0.78rem; color:var(--text-muted);">Acceso exclusivo para restaurantes con suscripción activa</p>
         </div>
-      </div>
-
-      <div class="demo-banner-box">
-        <div style="font-size:0.84rem; font-weight:800; color:var(--brand-hover); margin-bottom:4px;">
-          🚀 Prueba el flujo de 2 ventanas al instante
-        </div>
-        <p style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:10px;">
-          Entra a la vista previa con mesas, menú, extras, inventario y corte cargados sin configurar credenciales.
-        </p>
-        <button type="button" id="btn-enter-demo" class="btn btn-lg btn-brand">✨ Entrar a Vista Previa Demo</button>
       </div>
 
       <div class="auth-tabs">
@@ -1737,7 +1719,7 @@
       <form id="auth-form" class="form-stack">
         <div id="auth-business-group" class="hidden">
           <label for="auth-business-name">Nombre del restaurante / fonda *</label>
-          <input type="text" id="auth-business-name" placeholder="Ej. Dulce & Amargo" />
+          <input type="text" id="auth-business-name" placeholder="Ej. La Cocina de Mamá" />
         </div>
 
         <div>
@@ -1752,7 +1734,7 @@
 
         <p id="auth-error-msg" class="hidden" style="font-size:0.8rem; font-weight:700; color:var(--danger);"></p>
 
-        <button type="submit" id="auth-submit-btn" class="btn btn-dark">Entrar con cuenta</button>
+        <button type="submit" id="auth-submit-btn" class="btn btn-lg btn-brand">Entrar a Mi Cocina POS</button>
       </form>
     </div>
   </section>
@@ -1771,7 +1753,7 @@
       </div>
 
       <div class="paywall-alert">
-        Tu mensualidad no está activa o su periodo vigente ya venció. Comunícate para renovar y activar tu cuenta.
+        Tu mensualidad no está activa o su periodo vigente ya venció. Comunícate con el administrador para renovar y activar tu cuenta.
       </div>
 
       <div class="paywall-meta">
@@ -1781,15 +1763,14 @@
       </div>
 
       <div class="form-stack">
-        <button type="button" class="btn btn-brand" data-action="enter-demo-mode">✨ Entrar a Vista Previa Demo</button>
-        <button type="button" class="btn btn-neutral" data-action="recheck-subscription">🔄 Verificar suscripción de nuevo</button>
+        <button type="button" class="btn btn-brand" data-action="recheck-subscription">🔄 Ya pagué, verificar suscripción</button>
         <button type="button" class="btn btn-neutral" data-action="logout-user">Cerrar sesión</button>
       </div>
     </div>
   </section>
 
   <!-- =====================================================================
-       APLICACIÓN POS COMPLETA (VISIBLE EN MODO DEMO O CUENTA ACTIVA)
+       APLICACIÓN POS COMPLETA (VISIBLE SOLO CON SUSCRIPCIÓN ACTIVA)
        ===================================================================== -->
   <div id="pos-workspace" class="hidden">
 
@@ -1896,12 +1877,12 @@
           </div>
           <div class="brand-meta">
             <div class="brand-title-row">
-              <h1 id="header-business-name" class="brand-title">Dulce &amp; Amargo</h1>
+              <h1 id="header-business-name" class="brand-title">Mi Cocina POS</h1>
               <span class="status-pill">
                 <span class="status-dot"></span>
-                <span id="header-account-label">Vista Previa Demo</span>
+                <span id="header-account-label">Cuenta Activa</span>
               </span>
-              <span class="device-switcher-pill" title="Detección automática de pantalla o vista previa manual">
+              <span class="device-switcher-pill" title="Detección automática de pantalla o ajuste manual">
                 <span id="device-mode-icon">💻</span>
                 <select id="device-mode-select" aria-label="Modo de pantalla">
                   <option value="auto">Auto (PC)</option>
@@ -1927,7 +1908,7 @@
             <span id="nav-inv-badge" class="badge-count badge-alert hidden">0</span>
           </button>
           <button type="button" class="nav-tab" data-tab="config" title="Configuración, Marca, Folios y Gestor de Mesas">⚙️ Config.</button>
-          <button type="button" class="btn btn-sm btn-neutral" data-action="logout-user" title="Salir / Cambiar modo">Salir</button>
+          <button type="button" class="btn btn-sm btn-neutral" data-action="logout-user" title="Cerrar sesión">Salir</button>
         </nav>
       </div>
     </header>
@@ -2082,6 +2063,64 @@
               <button type="button" class="btn btn-sm btn-warning-soft" data-action="put-table-pending">📌 Pendiente</button>
               <button type="button" class="btn btn-sm btn-brand" data-action="scroll-to-order">Ver Orden ↓</button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PESTAÑA 2: CORTE DEL DÍA -->
+      <section id="view-corte" class="hidden">
+        <div class="kpi-grid">
+          <div class="kpi-card dark">
+            <div class="kpi-title">Venta Total del Turno</div>
+            <div id="corte-kpi-total" class="kpi-number">$0.00</div>
+            <div id="corte-kpi-tickets" class="kpi-sub">0 órdenes cobradas</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">💵 Efectivo en Caja</div>
+            <div id="corte-kpi-cash" class="kpi-number" style="color:var(--success);">$0.00</div>
+            <div class="kpi-sub">Cobros en efectivo</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">💳 Tarjeta</div>
+            <div id="corte-kpi-card" class="kpi-number" style="color:var(--info);">$0.00</div>
+            <div class="kpi-sub">Cobros con terminal</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">📲 Transferencia</div>
+            <div id="corte-kpi-transfer" class="kpi-number" style="color:var(--brand);">$0.00</div>
+            <div class="kpi-sub">Depósitos / SPEI</div>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <div class="card">
+            <div class="section-header">
+              <div>
+                <h2 class="section-title">Resumen por Platillo</h2>
+                <p class="section-subtitle">Cantidad vendida hoy</p>
+              </div>
+            </div>
+            <div id="corte-dishes-list" class="item-list"></div>
+          </div>
+
+          <div class="card">
+            <div class="section-header">
+              <div>
+                <h2 class="section-title">Tickets Cobrados</h2>
+                <p class="section-subtitle">Reimprime o respalda tus ventas del día</p>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <button type="button" class="btn btn-sm btn-success" data-action="copy-whatsapp-corte">📲 Copiar WhatsApp</button>
+                <button type="button" class="btn btn-sm btn-dark" data-action="export-csv">📥 Excel (CSV)</button>
+                <button type="button" class="btn btn-sm btn-neutral" data-action="export-json">💾 Respaldo JSON</button>
+                <label class="btn btn-sm btn-neutral" style="margin:0; cursor:pointer;">
+                  📂 Restaurar JSON
+                  <input type="file" id="import-json-input" accept=".json" class="hidden" />
+                </label>
+                <button type="button" class="btn btn-sm btn-danger-soft" data-action="reset-shift">🔄 Nuevo Turno</button>
+              </div>
+            </div>
+            <div id="corte-history-list" class="item-list"></div>
           </div>
         </div>
       </section>
@@ -2279,7 +2318,7 @@
               <div class="form-row-2">
                 <div>
                   <label for="tab-cfg-business-name">Nombre del Restaurante / Fonda</label>
-                  <input type="text" id="tab-cfg-business-name" placeholder="Ej. Dulce & Amargo" />
+                  <input type="text" id="tab-cfg-business-name" placeholder="Ej. La Cocina de Mamá" />
                 </div>
                 <div>
                   <label for="tab-cfg-next-folio">Siguiente Folio de Pedido</label>
@@ -2313,11 +2352,11 @@
               </div>
 
               <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 12px; padding: 14px;">
-                <strong style="font-size:0.88rem; display:block; margin-bottom:4px;">Estado de Sesión y Respaldo</strong>
+                <strong style="font-size:0.88rem; display:block; margin-bottom:4px;">Estado de Suscripción y Respaldo en Nube</strong>
                 <p style="font-size:0.78rem; color:var(--text-muted);">
-                  <strong>Modo / Cuenta:</strong> <span id="cfg-account-email">—</span><br />
+                  <strong>Cuenta:</strong> <span id="cfg-account-email">—</span><br />
                   <strong>Vigencia:</strong> <span id="cfg-period-end">—</span><br />
-                  Tus cambios se guardan en el navegador y se sincronizan con Supabase cuando hay sesión activa.
+                  Todos tus cambios se sincronizan automáticamente con tu cuenta en la nube.
                 </p>
               </div>
 
@@ -2352,26 +2391,19 @@
   </div>
 
   <!-- =====================================================================
-       ÚNICO BLOQUE DE JAVASCRIPT AUTOCONTENIDO + SUPABASE + MODO DEMO
+       ÚNICO BLOQUE DE JAVASCRIPT AUTOCONTENIDO + SUPABASE
        ===================================================================== -->
   <script>
     (function () {
       'use strict';
 
       // -------------------------------------------------------------------
-      // 0. CONFIGURACIÓN DE SUPABASE + MODO DEMO INTERACTIVO
+      // 0. CONFIGURACIÓN DE SUPABASE
       // -------------------------------------------------------------------
       const SUPABASE_URL = 'https://demecmbjohupktivzdfx.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_yZ9N_w5ayUnhTm3ts0Fomw_RRSHBuuq';
 
-      const hasSupabaseConfig =
-        typeof window.supabase !== 'undefined' &&
-        SUPABASE_URL &&
-        !SUPABASE_URL.includes('TU-PROYECTO') &&
-        SUPABASE_ANON_KEY &&
-        !SUPABASE_ANON_KEY.includes('TU-ANON-PUBLIC-KEY');
-
-      const sbClient = hasSupabaseConfig
+      const sbClient = (typeof window.supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY)
         ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
         : null;
 
@@ -2539,102 +2571,25 @@
         });
       }
 
-      function createDemoInitialData() {
+      function createDefaultState() {
         return {
-          businessName: 'Dulce & Amargo',
+          businessName: 'Mi Cocina POS',
           brandColor: DEFAULT_BRAND_COLOR,
           bgColor: DEFAULT_BG_COLOR,
           logoDataUrl: '',
-          nextFolio: 4,
+          nextFolio: 1,
           tables: createDefaultTables(),
           categoryExtras: JSON.parse(JSON.stringify(DEFAULT_CATEGORY_EXTRAS)),
           menu: JSON.parse(JSON.stringify(DEFAULT_MENU)),
           inventory: JSON.parse(JSON.stringify(DEFAULT_INVENTORY)),
-          openOrders: [
-            {
-              id: 'demo-ord-2',
-              folio: 2,
-              serviceType: 'mesa',
-              tableId: 'table-2',
-              label: 'Mesa 2',
-              customer: 'Familia López',
-              address: '',
-              notes: 'Sin picante en comida del día',
-              items: [
-                {
-                  uid: 'demo-ci-1',
-                  dishId: 'dish-1',
-                  category: 'Comida del día',
-                  name: 'Comida del día 1: Pollo en Mole',
-                  price: 85,
-                  qty: 2,
-                  extraText: 'Pierna',
-                  extraPrice: 0,
-                  ingredientsText: 'Pollo, mole, arroz, tortillas',
-                  autoDeductIngredients: true
-                },
-                {
-                  uid: 'demo-ci-2',
-                  dishId: 'dish-6',
-                  category: 'Bebidas',
-                  name: 'Agua Fresca 1 Litro',
-                  price: 35,
-                  qty: 1,
-                  extraText: 'Horchata',
-                  extraPrice: 0,
-                  ingredientsText: 'Agua fresca',
-                  autoDeductIngredients: true
-                }
-              ],
-              total: 205
-            }
-          ],
-          sales: [
-            {
-              id: 'demo-sale-1',
-              folio: 1,
-              label: 'Mesa 5',
-              customer: 'Carlos M.',
-              address: '',
-              notes: '',
-              items: [
-                {
-                  uid: 's-1',
-                  dishId: 'dish-3',
-                  category: 'Platillos',
-                  name: 'Orden de Tacos Dorados (4)',
-                  price: 70,
-                  qty: 1,
-                  extraText: 'Extra crema y queso',
-                  extraPrice: 15,
-                  ingredientsText: 'Tortillas de maíz, crema, queso, salsa',
-                  autoDeductIngredients: true
-                },
-                {
-                  uid: 's-2',
-                  dishId: 'dish-5',
-                  category: 'Bebidas',
-                  name: 'Refresco 600ml',
-                  price: 28,
-                  qty: 1,
-                  extraText: '',
-                  extraPrice: 0,
-                  ingredientsText: 'Refresco 600ml',
-                  autoDeductIngredients: true
-                }
-              ],
-              total: 113,
-              paymentMethod: 'Efectivo',
-              time: '13:15'
-            }
-          ]
+          openOrders: [],
+          sales: []
         };
       }
 
-      let state = createDemoInitialData();
+      let state = createDefaultState();
 
       let currentAccount = null;
-      let isDemoSession = false;
       let authMode = 'login';
       let activeTab = 'pos';
       let orderServiceType = 'mesa';
@@ -2731,7 +2686,7 @@
         if (announce) {
           const modeDesc = deviceOverride === 'auto'
             ? `Automático (${getDeviceLabelEs(activeDevice)})`
-            : `Vista previa ${getDeviceLabelEs(activeDevice)}`;
+            : `Modo ${getDeviceLabelEs(activeDevice)}`;
           showToast(`Diseño adaptado a: ${modeDesc}`, 'info');
         }
       }
@@ -2753,18 +2708,9 @@
         if (totalEl) totalEl.textContent = formatMXN(getCartTotal());
       }
 
-      function returnToTablePickerWindow() {
-        isTableCaptureOpen = false;
-        syncTableWindowVisibility();
-        renderTablesGrid();
-        renderOpenOrders();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
       function getLocalStorageKey() {
-        if (isDemoSession) return 'pos_fonda_dulce_amargo_demo_v1';
         const uid = currentAccount && currentAccount.id ? currentAccount.id : 'guest';
-        return 'pos_fonda_dulce_amargo_v4_' + uid;
+        return 'mi_cocina_pos_state_v1_' + uid;
       }
 
       function formatMXN(val) {
@@ -2891,7 +2837,7 @@
       }
 
       async function syncStateToCloud() {
-        if (isDemoSession || !sbClient || !currentAccount || !currentAccount.id) return;
+        if (!sbClient || !currentAccount || !currentAccount.id) return;
         try {
           const { error } = await sbClient
             .from('restaurant_accounts')
@@ -2916,7 +2862,7 @@
       }
 
       // -------------------------------------------------------------------
-      // MODO DEMO INTERACTIVO + SESIÓN SUPABASE
+      // AUTENTICACIÓN REAL SUPABASE + VERIFICACIÓN DE SUSCRIPCIÓN
       // -------------------------------------------------------------------
       function showGateScreen(screenName) {
         const authEl = document.getElementById('auth-screen');
@@ -2928,30 +2874,12 @@
         posEl.classList.toggle('hidden', screenName !== 'pos');
       }
 
-      function enterDemoMode() {
-        isDemoSession = true;
-        currentAccount = {
-          id: 'demo-user',
-          email: 'Vista Previa Demo',
-          subscription_status: 'active',
-          current_period_end: new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString()
-        };
-        state = createDemoInitialData();
-        loadLocalState();
-        isTableCaptureOpen = false;
-        activeTab = 'pos';
-        clearCurrentOrder(true);
-        showGateScreen('pos');
-        renderAll();
-        showToast('Vista Previa Demo activa: selecciona una mesa para empezar.', 'info');
-      }
-
       function setAuthMode(mode) {
         authMode = mode;
         document.getElementById('auth-tab-login').classList.toggle('active', mode === 'login');
         document.getElementById('auth-tab-register').classList.toggle('active', mode === 'register');
         document.getElementById('auth-business-group').classList.toggle('hidden', mode !== 'register');
-        document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Entrar con cuenta' : 'Crear cuenta y continuar';
+        document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Entrar a Mi Cocina POS' : 'Crear cuenta de restaurante';
         document.getElementById('auth-error-msg').classList.add('hidden');
       }
 
@@ -2971,15 +2899,11 @@
       }
 
       async function evaluateUserSession() {
-        if (isDemoSession) {
-          showGateScreen('pos');
-          renderAll();
-          return;
-        }
-
         const errEl = document.getElementById('auth-error-msg');
 
-        if (!hasSupabaseConfig || !sbClient) {
+        if (!sbClient) {
+          errEl.textContent = 'No se pudo inicializar el cliente de Supabase. Verifica tu conexión a internet.';
+          errEl.classList.remove('hidden');
           showGateScreen('auth');
           return;
         }
@@ -3001,7 +2925,7 @@
           currentAccount = {
             id: session.user.id,
             email: session.user.email || '',
-            business_name: (session.user.user_metadata && session.user.user_metadata.business_name) || 'Mi Restaurante',
+            business_name: (session.user.user_metadata && session.user.user_metadata.business_name) || 'Mi Cocina POS',
             subscription_status: 'inactive',
             current_period_end: null,
             pos_state: {}
@@ -3019,6 +2943,7 @@
           return;
         }
 
+        state = createDefaultState();
         loadLocalState();
         if (accountRow.business_name) {
           state.businessName = accountRow.business_name;
@@ -3028,6 +2953,9 @@
           safeStore.set(getLocalStorageKey(), JSON.stringify(state));
         }
 
+        isTableCaptureOpen = false;
+        activeTab = 'pos';
+        clearCurrentOrder(true);
         showGateScreen('pos');
         renderAll();
       }
@@ -3038,19 +2966,18 @@
         const submitBtn = document.getElementById('auth-submit-btn');
         errEl.classList.add('hidden');
 
-        if (!hasSupabaseConfig || !sbClient) {
-          errEl.textContent = 'Puedes usar "Entrar a Vista Previa Demo" arriba sin credenciales.';
+        if (!sbClient) {
+          errEl.textContent = 'Servicio de autenticación no disponible en este momento.';
           errEl.classList.remove('hidden');
           return;
         }
 
         const email = (document.getElementById('auth-email').value || '').trim();
         const password = document.getElementById('auth-password').value || '';
-        const businessName = (document.getElementById('auth-business-name').value || '').trim() || 'Mi Restaurante';
+        const businessName = (document.getElementById('auth-business-name').value || '').trim() || 'Mi Cocina POS';
 
         submitBtn.disabled = true;
         try {
-          isDemoSession = false;
           if (authMode === 'login') {
             const { error } = await sbClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
@@ -3063,7 +2990,7 @@
             if (error) throw error;
             if (!data.session) {
               errEl.style.color = 'var(--success)';
-              errEl.textContent = 'Cuenta creada. Revisa tu correo para confirmar o entra con Vista Previa Demo.';
+              errEl.textContent = 'Cuenta creada. Revisa tu correo para confirmar tu registro y luego inicia sesión.';
               errEl.classList.remove('hidden');
               return;
             }
@@ -3071,7 +2998,7 @@
           await evaluateUserSession();
         } catch (err) {
           errEl.style.color = 'var(--danger)';
-          errEl.textContent = (err.message || 'No se pudo completar la autenticación.') + ' Usa Vista Previa Demo si lo deseas.';
+          errEl.textContent = err.message || 'No se pudo completar la autenticación.';
           errEl.classList.remove('hidden');
         } finally {
           submitBtn.disabled = false;
@@ -3079,11 +3006,12 @@
       }
 
       async function logoutUser() {
-        isDemoSession = false;
         if (sbClient) {
           try { await sbClient.auth.signOut(); } catch (e) {}
         }
         currentAccount = null;
+        state = createDefaultState();
+        document.title = 'Mi Cocina POS';
         clearCurrentOrder(true);
         showGateScreen('auth');
       }
@@ -3235,12 +3163,13 @@
 
       function updateHeader() {
         applyBrandTheme();
-        document.getElementById('header-business-name').textContent = state.businessName;
+        const bizName = (state.businessName || '').trim() || 'Mi Cocina POS';
+        document.getElementById('header-business-name').textContent = bizName;
+        document.title = bizName !== 'Mi Cocina POS' ? `${bizName} — Mi Cocina POS` : 'Mi Cocina POS';
+
         const accLabel = document.getElementById('header-account-label');
         if (accLabel) {
-          accLabel.textContent = isDemoSession
-            ? 'Vista Previa Demo'
-            : ((currentAccount && currentAccount.email) || 'Cuenta Activa');
+          accLabel.textContent = (currentAccount && currentAccount.email) || 'Cuenta Activa';
         }
         const now = new Date();
         document.getElementById('header-date').textContent = now.toLocaleDateString('es-MX', {
@@ -4417,14 +4346,10 @@
         const emailSpan = document.getElementById('cfg-account-email');
         const periodSpan = document.getElementById('cfg-period-end');
         if (emailSpan) {
-          emailSpan.textContent = isDemoSession
-            ? 'Vista Previa Demo (Interactiva)'
-            : ((currentAccount && currentAccount.email) || '—');
+          emailSpan.textContent = (currentAccount && currentAccount.email) || '—';
         }
         if (periodSpan) {
-          periodSpan.textContent = isDemoSession
-            ? 'Disponible para pruebas'
-            : (currentAccount ? formatDateTimeMX(currentAccount.current_period_end) : '—');
+          periodSpan.textContent = currentAccount ? formatDateTimeMX(currentAccount.current_period_end) : '—';
         }
 
         const listEl = document.getElementById('tables-manager-list');
@@ -4529,8 +4454,6 @@
         });
       }
 
-      document.getElementById('btn-enter-demo').addEventListener('click', enterDemoMode);
-
       document.addEventListener('click', function (e) {
         const authModeBtn = e.target.closest('[data-auth-mode]');
         if (authModeBtn) {
@@ -4580,10 +4503,6 @@
         const action = actionEl.getAttribute('data-action');
 
         switch (action) {
-          case 'enter-demo-mode':
-            enterDemoMode();
-            break;
-
           case 'logout-user':
             logoutUser();
             break;
@@ -5221,8 +5140,10 @@
 
       if (sbClient) {
         sbClient.auth.onAuthStateChange(function (event) {
-          if (event === 'SIGNED_OUT' && !isDemoSession) {
+          if (event === 'SIGNED_OUT') {
             currentAccount = null;
+            state = createDefaultState();
+            document.title = 'Mi Cocina POS';
             showGateScreen('auth');
           }
         });
